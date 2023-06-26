@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ishihara_leaderboard", "Ishihara_leaderboard\Ishihara_leaderboard.csproj", "{AE26EEC0-5F3F-4AE9-B8D5-6CEC66564EBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE26EEC0-5F3F-4AE9-B8D5-6CEC66564EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE26EEC0-5F3F-4AE9-B8D5-6CEC66564EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE26EEC0-5F3F-4AE9-B8D5-6CEC66564EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE26EEC0-5F3F-4AE9-B8D5-6CEC66564EBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9282CD0B-9798-4349-931A-1E087E11C066}
+	EndGlobalSection
+EndGlobal
