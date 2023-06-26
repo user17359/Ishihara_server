@@ -3,6 +3,7 @@ using Ishihara_leaderboard.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ishihara_leaderboard.Migrations
 {
     [DbContext(typeof(Ishihara_leaderboardContext))]
-    partial class Ishihara_leaderboardContextModelSnapshot : ModelSnapshot
+    [Migration("20230626231439_ConstarintsUpdate")]
+    partial class ConstarintsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
