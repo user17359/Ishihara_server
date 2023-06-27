@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Ishihara_leaderboard.Data;
 using Ishihara_leaderboard;
 var builder = WebApplication.CreateBuilder(args);
+var ishiharaApiKey = builder.Configuration["Ishihara:AdminKey"];
 builder.Services.AddDbContext<Ishihara_leaderboardContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Ishihara_leaderboardContext") ?? throw new InvalidOperationException("Connection string 'Ishihara_leaderboardContext' not found.")));
 
@@ -28,6 +29,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapLeaderboardRecordEndpoints();
+app.MapLeaderboardRecordEndpoints(builder.Configuration);
 
 app.Run();

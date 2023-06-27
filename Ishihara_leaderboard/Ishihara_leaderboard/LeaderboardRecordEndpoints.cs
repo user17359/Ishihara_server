@@ -1,11 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Ishihara_leaderboard.Data;
 using Ishihara_leaderboard.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
+
 namespace Ishihara_leaderboard;
 
 public static class LeaderboardRecordEndpoints
 {
-    public static void MapLeaderboardRecordEndpoints (this IEndpointRouteBuilder routes)
+
+    public static void MapLeaderboardRecordEndpoints (this IEndpointRouteBuilder routes, IConfiguration configuration)
     {
         int maxSize = 10;
 
@@ -45,19 +49,27 @@ public static class LeaderboardRecordEndpoints
         .Produces(StatusCodes.Status400BadRequest);
 
         //delete
-        routes.MapDelete("/api/LeaderboardRecord/{id}", async (int id, Ishihara_leaderboardContext db) =>
+        routes.MapDelete("/api/LeaderboardRecord/{id}", async (int id, Ishihara_leaderboardContext db, [FromQuery(Name = "key")] string key) =>
         {
-            //TODO require key to delete
-            if (await db.LeaderboardRecord.FindAsync(id) is LeaderboardRecord leaderboardRecord)
+            if (key == configuration["Ishihara:AdminKey"])
             {
-                db.LeaderboardRecord.Remove(leaderboardRecord);
-                await db.SaveChangesAsync();
-                return Results.Ok(leaderboardRecord);
+                //TODO require key to delete
+                if (await db.LeaderboardRecord.FindAsync(id) is LeaderboardRecord leaderboardRecord)
+                {
+                    db.LeaderboardRecord.Remove(leaderboardRecord);
+                    await db.SaveChangesAsync();
+                    return Results.Ok(leaderboardRecord);
+                }
+                return Results.NotFound();
             }
-            return Results.NotFound();
+            else
+            {
+                return Results.BadRequest();
+            }
         })
         .WithName("DeleteLeaderboardRecord")
         .Produces<LeaderboardRecord>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound);
+      //  .Produces(StatusCodes.Status403Forbidden);
     }
 }
