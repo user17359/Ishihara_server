@@ -12,9 +12,8 @@ public static class LeaderboardRecordEndpoints
         //get
         routes.MapGet("/api/LeaderboardRecord", async (Ishihara_leaderboardContext db) =>
         {
-            var result = await db.LeaderboardRecord.ToListAsync();
-            var sortedResult = result.OrderByDescending(o => o.Score).ToList();
-            return sortedResult;
+            var result = await db.LeaderboardRecord.OrderByDescending(o => o.Score).Take(maxSize).ToListAsync();
+            return result;
         })
         .WithName("GetAllLeaderboardRecords")
         .Produces<List<LeaderboardRecord>>(StatusCodes.Status200OK);
@@ -22,37 +21,19 @@ public static class LeaderboardRecordEndpoints
         //post
         routes.MapPost("/api/LeaderboardRecord/", async (LeaderboardRecord leaderboardRecord, Ishihara_leaderboardContext db) =>
         {
-            var result = await db.LeaderboardRecord.ToListAsync();
-            var sortedResult = result.OrderByDescending(o => o.Score).ToList();
-            if(sortedResult.Count < maxSize || leaderboardRecord.Score > sortedResult.Last().Score)
+            var record = await db.LeaderboardRecord.Where(o => o.Name == leaderboardRecord.Name).FirstAsync();
+            if (record == null)
             {
-                bool doesNameApear = false;
-                foreach(LeaderboardRecord position in sortedResult)
-                {
-                    if(position.Name == leaderboardRecord.Name)
-                    {
-                        doesNameApear = true; break;
-                    }
-                }
-                if(!doesNameApear)
-                {
-                    if(sortedResult.Count >= maxSize)
-                    {
-                        db.LeaderboardRecord.Remove(sortedResult.Last());
-                    }
-                    db.LeaderboardRecord.Add(leaderboardRecord);
-                }
-                else
-                {
-                    //TODO change existing record
-                }
-                await db.SaveChangesAsync();
-                return Results.Created($"/LeaderboardRecords/{leaderboardRecord.Id}", leaderboardRecord);
+                db.LeaderboardRecord.Add(leaderboardRecord);
+                record = leaderboardRecord;
             }
-            else
+            else if (record.Score < leaderboardRecord.Score)
             {
-                return Results.Created($"Not fitting in the leaderboard", leaderboardRecord);
+                record.Score = leaderboardRecord.Score;
+                db.LeaderboardRecord.Update(record);
             }
+            await db.SaveChangesAsync();
+            return Results.Created($"/LeaderboardRecords/{record.Id}", record);
         })
         .WithName("CreateLeaderboardRecord")
         .Produces<LeaderboardRecord>(StatusCodes.Status201Created);
