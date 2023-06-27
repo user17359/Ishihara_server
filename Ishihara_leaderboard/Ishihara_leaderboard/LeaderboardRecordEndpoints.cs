@@ -32,11 +32,17 @@ public static class LeaderboardRecordEndpoints
                 record.Score = leaderboardRecord.Score;
                 db.LeaderboardRecord.Update(record);
             }
+            else
+            {
+                return Results.BadRequest();
+            }
             await db.SaveChangesAsync();
             return Results.Created($"/LeaderboardRecords/{record.Id}", record);
+
         })
         .WithName("CreateLeaderboardRecord")
-        .Produces<LeaderboardRecord>(StatusCodes.Status201Created);
+        .Produces<LeaderboardRecord>(StatusCodes.Status201Created)
+        .Produces(StatusCodes.Status400BadRequest);
 
         //delete
         routes.MapDelete("/api/LeaderboardRecord/{id}", async (int id, Ishihara_leaderboardContext db) =>
